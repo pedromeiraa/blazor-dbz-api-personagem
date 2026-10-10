@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # BlazorViaCep
 
 Aplicação desenvolvida em Blazor WebAssembly para consultar informações de personagens da franquia Dragon Ball usando a API pública oficial.
@@ -53,3 +54,6 @@ Após iniciar, abra a URL exibida no terminal (normalmente `http://localhost:500
 ## Observação
 
 A aplicação foi criada como exemplo de consumo de API em Blazor, com foco em uma interface simples para consulta de personagens por ID.
+=======
+# blazor-dbz-api-personagem
+>>>>>>> 0f144b9f8dbc238086e6226b59ae712a18251cbc
