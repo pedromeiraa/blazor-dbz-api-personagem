@@ -1,0 +1,81 @@
+@page "/personagem"
+@inject HttpClient Http
+
+<h3>Consultar Personagem - Dragon Ball</h3>
+
+<label>ID do Personagem:</label><br />
+<input type="number" @bind="idPersonagem" placeholder="Ex: 1" />
+<button @onclick="BuscarPersonagem">Buscar</button>
+
+@if (carregando)
+{
+    <p>A carregar dados...</p>
+}
+else if (personagem != null)
+{
+    <div>
+        <p><strong>Nome:</strong> @personagem.name</p>
+        <p><strong>Planeta:</strong> @personagem.originPlanet</p>
+        <p><strong>Transformações:</strong></p>
+        <ul>
+            @if (personagem.transformations != null && personagem.transformations.Count > 0)
+            {
+                @foreach (var t in personagem.transformations)
+                {
+                    <li>@t.name - @t.ki</li>
+                }
+            }
+            else
+            {
+                <li>Nenhuma transformação registada.</li>
+            }
+        </ul>
+    </div>
+}
+else if (mensagemErro != null)
+{
+    <p style="color: red;">@mensagemErro</p>
+}
+
+@code {
+    private int idPersonagem = 1;
+    private PersonagemDto? personagem;
+    private bool carregando = false;
+    private string? mensagemErro;
+
+    private async Task BuscarPersonagem()
+    {
+        carregando = true;
+        mensagemErro = null;
+        personagem = null;
+
+        try
+        {
+            // Consome o endpoint dinamicamente com base no ID digitado
+            string url = $"https://dragonball-api.com/api/characters/{idPersonagem}";
+            personagem = await Http.GetFromJsonAsync<PersonagemDto>(url);
+        }
+        catch (Exception)
+        {
+            mensagemErro = "Personagem não encontrado ou erro ao conectar à API.";
+        }
+        finally
+        {
+            carregando = false;
+        }
+    }
+
+    // Classes de mapeamento para o JSON da Dragon Ball API
+    public class Transformation
+    {
+        public string? name { get; set; }
+        public string? ki { get; set; }
+    }
+
+    public class PersonagemDto
+    {
+        public string? name { get; set; }
+        public string? originPlanet { get; set; }
+        public List<Transformation>? transformations { get; set; }
+    }
+}
